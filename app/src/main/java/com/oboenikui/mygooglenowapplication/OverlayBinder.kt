@@ -8,8 +8,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import android.view.WindowManager.LayoutParams.*
+import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.TextView
 
 class OverlayBinder(private val context: Context) : IOverlay.Stub() {
 
@@ -30,10 +30,13 @@ class OverlayBinder(private val context: Context) : IOverlay.Stub() {
             layoutParams.type = if (Build.VERSION.SDK_INT >= 25) TYPE_DRAWN_APPLICATION else TYPE_APPLICATION
             window.attributes = layoutParams
             window.clearFlags(FLAG_SHOW_WALLPAPER)
-            val textView = TextView(context)
-            textView.text = "Hello, overlay!"
+            val button = Button(context)
+            button.text = "CLICK TO HIDE"
+            button.setOnClickListener {
+                window.windowManager.removeView(window.decorView)
+            }
             val frameLayout = FrameLayout(context).apply {
-                addView(textView)
+                addView(button)
                 fitsSystemWindows = true
             }
             window.setContentView(frameLayout)
